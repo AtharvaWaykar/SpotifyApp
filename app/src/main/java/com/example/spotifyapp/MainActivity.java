@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
         // Set the click listener for the combined button
         combinedButton.setOnClickListener((v) -> {
             getToken();
-            getCode();
-            onGetUserProfileClicked();
         });
     }
 
@@ -77,15 +75,17 @@ public class MainActivity extends AppCompatActivity {
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
             mAccessToken = response.getAccessToken();
             setTextAsync(mAccessToken, tokenTextView);
+            getCode();
         } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
             mAccessCode = response.getCode();
             setTextAsync(mAccessCode, codeTextView);
+            onGetUserProfileClicked();
         }
     }
 
     public void onGetUserProfileClicked() {
-        if (mAccessToken == null) {
-            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+        if (mAccessToken == null || mAccessCode == null) {
+            Toast.makeText(this, "You need to get an access token and access code first!", Toast.LENGTH_SHORT).show();
             return;
         }
 
