@@ -21,26 +21,12 @@
             android:layout_margin="8dp"
             tools:text="Token:" />
 
-        <Button
-            android:id="@+id/token_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="Link to spotify login" />
-
         <TextView
             android:id="@+id/code_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             tools:text="Code:" />
-
-        <Button
-            android:id="@+id/code_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="Request Code" />
 
         <TextView
             android:id="@+id/response_text_view"
@@ -54,13 +40,11 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/profile_btn"
-                android:layout_width="0dp"
+                android:id="@+id/combined_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:text="Get User Profile" />
+                android:text="Get Token, Code  Profile" />
         </LinearLayout>
     </LinearLayout>
 
