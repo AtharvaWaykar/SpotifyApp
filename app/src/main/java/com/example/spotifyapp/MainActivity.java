@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
 
-    private final OkHttpClient mOkHttpClient = new OkHttpClient();
+    final OkHttpClient mOkHttpClient = new OkHttpClient();
     private String mAccessToken, mAccessCode;
     private Call mCall;
 
@@ -81,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
             setTextAsync(mAccessCode, codeTextView);
             onGetUserProfileClicked();
         }
+        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+        intent.putExtra("ACCESS_TOKEN", mAccessToken);
+        startActivity(intent);
     }
 
     public void onGetUserProfileClicked() {
