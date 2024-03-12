@@ -10,7 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="164dp"
+        tools:layout_editor_absoluteY="248dp">
 
         <TextView
             android:id="@+id/token_text_view"
@@ -19,26 +21,12 @@
             android:layout_margin="8dp"
             tools:text="Token:" />
 
-        <Button
-            android:id="@+id/token_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="Request Token" />
-
         <TextView
             android:id="@+id/code_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             tools:text="Code:" />
-
-        <Button
-            android:id="@+id/code_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="Request Code" />
 
         <TextView
             android:id="@+id/response_text_view"
@@ -52,13 +40,11 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/profile_btn"
-                android:layout_width="0dp"
+                android:id="@+id/combined_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:text="Get User Profile" />
+                android:text="Get Token, Code + Profile" />
         </LinearLayout>
     </LinearLayout>
 
