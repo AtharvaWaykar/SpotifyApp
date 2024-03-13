@@ -5,20 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
-    <Button
-        android:id="@+id/fetch_artists_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fetch Top Artists"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
-
     <TextView
         android:id="@+id/top_artists_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="227dp"
+        android:layout_centerVertical="true"
         android:text="Top 5 Artists"
-        android:textSize="18sp"
-        android:layout_centerInParent="true"/>
+        android:textSize="18sp" />
 
 </RelativeLayout>

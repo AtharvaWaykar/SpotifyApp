@@ -3,15 +3,18 @@ package com.example.spotifyapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -28,48 +31,29 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         String accessToken = getIntent().getStringExtra("ACCESS_TOKEN");
-
         topArtistsTextView = findViewById(R.id.top_artists_text_view);
-        Button fetchArtistsButton = findViewById(R.id.fetch_artists_button);
 
-        // Set click listener for the fetchArtistsButton
-        fetchArtistsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get authentication token from Intent extras
-
-                // Fetch top artists using accessToken
-                fetchTopArtists(accessToken);
-            }
-        });
+        fetchTopArtists(accessToken);
     }
 
     private void fetchTopArtists(String accessToken) {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
+        final Request request = new Request.Builder()
                 .url("https://api.spotify.com/v1/me/top/artists")
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
+        MainActivity.mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                topArtistsTextView.setText("Failed to fetch top artists: " + e.getMessage());
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(HomeActivity.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                int responseCode = response.code();
-                String responseBody = response.body().string();
-
-                if (!response.isSuccessful()) {
-                    topArtistsTextView.setText("Failed to fetch top artists. Response code: " + responseCode);
-                    System.out.println("Error response: " + responseBody);
-                    return;
-                }
-
                 try {
+                    String responseBody = response.body().string();
                     JSONObject json = new JSONObject(responseBody);
                     JSONArray items = json.getJSONArray("items");
                     StringBuilder artists = new StringBuilder();
@@ -88,6 +72,16 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Creates a UI thread to update a TextView in the background
+     * Reduces UI latency and makes the system perform more consistently
+     *
+     * @param text the text to set
+     * @param textView TextView object to update
+     */
+    private void setTextAsync(final String text, TextView textView) {
+        runOnUiThread(() -> textView.setText(text));
+    }
 
 
 
