@@ -66,11 +66,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         homeButton.setOnClickListener((v) -> {
-          //  Fragment fragment = new Home();
-            //FragmentManager fragmentManager = getSupportFragmentManager();
-            //fragmentManager.beginTransaction()
-              //      .replace(R.id.fragment_container, fragment)
-                //    .commit();
+            Home homeFragment = new Home();
+
+            // Get the FragmentManager and start a fragment transaction
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.linearlay, homeFragment) // Replace fragment_container with the ID of your container layout
+                    .commit();
         });
 
     }

@@ -8,11 +8,13 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/linearlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="164dp"
         tools:layout_editor_absoluteY="248dp">
+
 
         <TextView
             android:id="@+id/token_text_view"
