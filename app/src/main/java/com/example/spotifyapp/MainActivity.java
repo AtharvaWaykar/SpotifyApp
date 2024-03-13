@@ -62,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
         // Set the click listener for the combined button
         combinedButton.setOnClickListener((v) -> {
             getToken();
-            homeButton.setEnabled(true);
+            if (profileCreated) {
+                homeButton.setEnabled(true);
+            }
         });
 
         homeButton.setOnClickListener((v) -> {
