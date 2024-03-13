@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
+//
     public void getToken() {
         final AuthorizationRequest request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN);
         AuthorizationClient.openLoginActivity(MainActivity.this, AUTH_TOKEN_REQUEST_CODE, request);
