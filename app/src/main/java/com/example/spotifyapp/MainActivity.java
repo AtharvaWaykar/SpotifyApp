@@ -26,7 +26,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
+import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity {
 
     public static final String CLIENT_ID = "bcac1ff3762a400f80669cc131690aa7";
@@ -62,9 +62,7 @@ public class MainActivity extends AppCompatActivity {
         // Set the click listener for the combined button
         combinedButton.setOnClickListener((v) -> {
             getToken();
-            if (profileCreated) {
                 homeButton.setEnabled(true);
-            }
         });
 
         homeButton.setOnClickListener((v) -> {
