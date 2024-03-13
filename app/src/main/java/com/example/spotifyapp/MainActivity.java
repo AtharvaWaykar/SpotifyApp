@@ -1,6 +1,9 @@
 package com.example.spotifyapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private Call mCall;
 
     private TextView tokenTextView, codeTextView, profileTextView;
+    private boolean profileCreated = false; // Add this boolean variable
+    Button homeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +55,24 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize the combined button
         Button combinedButton = findViewById(R.id.combined_button);
+        homeButton = findViewById(R.id.next_home);
+            homeButton.setEnabled(false);
+
 
         // Set the click listener for the combined button
         combinedButton.setOnClickListener((v) -> {
             getToken();
+            homeButton.setEnabled(true);
         });
+
+        homeButton.setOnClickListener((v) -> {
+          //  Fragment fragment = new Home();
+            //FragmentManager fragmentManager = getSupportFragmentManager();
+            //fragmentManager.beginTransaction()
+              //      .replace(R.id.fragment_container, fragment)
+                //    .commit();
+        });
+
     }
 
     public void getToken() {
@@ -107,13 +125,21 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                System.out.println("in onResponse");
+
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     setTextAsync(jsonObject.toString(3), profileTextView);
+                    if (jsonObject.get("error") == null) { //this means there isnt an error
+                            homeButton.setEnabled(true);
+                            profileCreated = true;
+
+                        //homeButton.setEnabled(true);
+                        //profileCreated = true;
+                    }
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
-                    Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
-                            Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
