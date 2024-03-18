@@ -8,8 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +38,8 @@ public class TracksFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String accessToken;
-    TextView tracksTextView;
+    TextView firstTrack, secondTrack, thirdTrack, fourthTrack, fifthTrack;
+    ImageView firstTrackImage, secondTrackImage, thirdTrackImage, fourthTrackImage, fifthTrackImage;
 
     public TracksFragment() {
         // Required empty public constructor
@@ -74,13 +78,13 @@ public class TracksFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        tracksTextView = (TextView) getView().findViewById(R.id.tracks_text);
-        fetchTopArtists(accessToken);
+        setComponents(view);
+        fetchTopTracks(accessToken);
     }
 
-    private void fetchTopArtists(String accessToken) {
+    private void fetchTopTracks(String accessToken) {
         final Request request = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/tracks")
+                .url("https://api.spotify.com/v1/me/top/tracks?limit=5")
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .build();
 
@@ -96,19 +100,73 @@ public class TracksFragment extends Fragment {
                     String responseBody = response.body().string();
                     JSONObject json = new JSONObject(responseBody);
                     JSONArray items = json.getJSONArray("items");
-                    StringBuilder artists = new StringBuilder();
+                    StringBuilder tracks = new StringBuilder();
                     for (int i = 0; i < items.length(); i++) {
-                        JSONObject artist = items.getJSONObject(i);
-                        String name = artist.getString("name");
-                        artists.append(name).append("\n");
+                        JSONObject track = items.getJSONObject(i);
+                        String name = track.getString("name");
+                        tracks.append(name).append("\n");
+                        JSONArray images = track.getJSONArray("images");
+                        String imageUrl = images.getJSONObject(2).getString("url");
+                        loadTrackImage(imageUrl, getTrackImageView(i));
                     }
-                    final String topArtists = artists.toString();
-                    setTextAsync(topArtists, tracksTextView);
+                    final String topTracks = tracks.toString();
+                    setTracksText(topTracks);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+
+
+
+    // Helper method to load image into ImageView using Glide
+    private void loadTrackImage(String imageUrl, ImageView imageView) {
+        getActivity().runOnUiThread(() -> {
+            Glide.with(getActivity())
+                    .load(imageUrl)
+                    .into(imageView);
+        });
+    }
+
+    private void setTracksText(String topTracks) {
+        String[] tracks = topTracks.split("\n");
+        setTextAsync("1. " + tracks[0], firstTrack);
+        setTextAsync("2. " + tracks[1], secondTrack);
+        setTextAsync("3. " + tracks[2], thirdTrack);
+        setTextAsync("4. " + tracks[3], fourthTrack);
+        setTextAsync("5. " + tracks[4], fifthTrack);
+    }
+
+    // Helper method to get the appropriate ImageView based on index
+    private ImageView getTrackImageView(int index) {
+        switch (index) {
+            case 0:
+                return firstTrackImage;
+            case 1:
+                return secondTrackImage;
+            case 2:
+                return thirdTrackImage;
+            case 3:
+                return fourthTrackImage;
+            case 4:
+                return fifthTrackImage;
+            default:
+                return null;
+        }
+    }
+    private void setComponents(View view) {
+        firstTrack = (TextView) view.findViewById(R.id.first_track_name);
+        secondTrack = (TextView) view.findViewById(R.id.second_track_name);
+        thirdTrack = (TextView) view.findViewById(R.id.third_track_name);
+        fourthTrack = (TextView) view.findViewById(R.id.fourth_track_name);
+        fifthTrack = (TextView) view.findViewById(R.id.fifth_track_name);
+        firstTrackImage = (ImageView) view.findViewById(R.id.first_track_image);
+        secondTrackImage = (ImageView) view.findViewById(R.id.second_track_image);
+        thirdTrackImage = (ImageView) view.findViewById(R.id.third_track_image);
+        fourthTrackImage = (ImageView) view.findViewById(R.id.fourth_track_image);
+        fifthTrackImage = (ImageView) view.findViewById(R.id.fifth_track_image);
     }
 
     /**

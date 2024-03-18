@@ -1,16 +1,125 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/string"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TracksFragment">
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/tracks_text"
+    <!-- Top track -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/first_track_image"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/first_track_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="First track"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Second and Third tracks -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_tracks" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/second_track_image"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/second_track_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Second track"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/third_track_image"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/third_track_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Third track"
+                android:textSize="14sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Fourth and Fifth tracks -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/fourth_track_image"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/fourth_track_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fourth track"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/fifth_track_image"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/fifth_track_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fifth track"
+                android:textSize="14sp"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

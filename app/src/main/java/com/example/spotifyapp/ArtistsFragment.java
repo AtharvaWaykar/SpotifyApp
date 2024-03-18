@@ -8,7 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,8 +38,8 @@ public class ArtistsFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String accessToken;
-    TextView artistsTextView;
-
+    TextView firstArtist, secondArtist, thirdArtist, fourthArtist, fifthArtist;
+    ImageView firstArtistImage, secondArtistImage, thirdArtistImage, fourthArtistImage, fifthArtistImage;
 
     public ArtistsFragment() {
         // Required empty public constructor
@@ -73,17 +76,13 @@ public class ArtistsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        artistsTextView = (TextView) getView().findViewById(R.id.artists_text);
-        if (accessToken != null) {
-            fetchTopArtists(accessToken);
-        } else {
-            Log.e("ArtistsFragment", "Access token is null");
-        }
+        setComponents(view);
+        fetchTopArtists(accessToken);
     }
 
     private void fetchTopArtists(String accessToken) {
         final Request request = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/artists")
+                .url("https://api.spotify.com/v1/me/top/artists?limit=5")
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .build();
 
@@ -104,14 +103,66 @@ public class ArtistsFragment extends Fragment {
                         JSONObject artist = items.getJSONObject(i);
                         String name = artist.getString("name");
                         artists.append(name).append("\n");
+                        JSONArray images = artist.getJSONArray("images");
+                        String imageUrl = images.getJSONObject(2).getString("url");
+                        loadArtistImage(imageUrl, getArtistImageView(i));
+
                     }
                     final String topArtists = artists.toString();
-                    setTextAsync(topArtists, artistsTextView);
+                    setArtistsText(topArtists);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    // Helper method to load image into ImageView using Glide
+    private void loadArtistImage(String imageUrl, ImageView imageView) {
+        getActivity().runOnUiThread(() -> {
+            Glide.with(getActivity())
+                    .load(imageUrl)
+                    .into(imageView);
+        });
+    }
+
+    private void setArtistsText(String topArtists) {
+        String[] artists = topArtists.split("\n");
+        setTextAsync("1. " + artists[0], firstArtist);
+        setTextAsync("2. " + artists[1], secondArtist);
+        setTextAsync("3. " + artists[2], thirdArtist);
+        setTextAsync("4. " + artists[3], fourthArtist);
+        setTextAsync("5. " + artists[4], fifthArtist);
+    }
+
+    // Helper method to get the appropriate ImageView based on index
+    private ImageView getArtistImageView(int index) {
+        switch (index) {
+            case 0:
+                return firstArtistImage;
+            case 1:
+                return secondArtistImage;
+            case 2:
+                return thirdArtistImage;
+            case 3:
+                return fourthArtistImage;
+            case 4:
+                return fifthArtistImage;
+            default:
+                return null;
+        }
+    }
+    private void setComponents(View view) {
+        firstArtist = (TextView) view.findViewById(R.id.first_artist_name);
+        secondArtist = (TextView) view.findViewById(R.id.second_artist_name);
+        thirdArtist = (TextView) view.findViewById(R.id.third_artist_name);
+        fourthArtist = (TextView) view.findViewById(R.id.fourth_artist_name);
+        fifthArtist = (TextView) view.findViewById(R.id.fifth_artist_name);
+        firstArtistImage = (ImageView) view.findViewById(R.id.first_artist_image);
+        secondArtistImage = (ImageView) view.findViewById(R.id.second_artist_image);
+        thirdArtistImage = (ImageView) view.findViewById(R.id.third_artist_image);
+        fourthArtistImage = (ImageView) view.findViewById(R.id.fourth_artist_image);
+        fifthArtistImage = (ImageView) view.findViewById(R.id.fifth_artist_image);
     }
 
     /**
