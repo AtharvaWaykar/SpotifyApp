@@ -28,8 +28,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity {
-
-    private TextView topArtistsTextView;
+    private String accessToken;
     private FrameLayout fragmentContainer;
     private TabLayout tabLayout;
 
@@ -37,10 +36,10 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        String accessToken = getIntent().getStringExtra("ACCESS_TOKEN");
+        accessToken = getIntent().getStringExtra("ACCESS_TOKEN");
         fragmentContainer = (FrameLayout) findViewById(R.id.fragmentContainer);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ArtistsFragment())
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, ArtistsFragment.newInstance(accessToken))
                 .addToBackStack(null)
                 .commit();
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -49,12 +48,13 @@ public class HomeActivity extends AppCompatActivity {
                 Fragment selectedFragment = null;
                 switch (tab.getPosition()) {
                     case 0:
-                        selectedFragment = new ArtistsFragment();
+                        selectedFragment = ArtistsFragment.newInstance(accessToken);
                         break;
                     case 1:
-                        selectedFragment = new TracksFragment();
+                        selectedFragment = TracksFragment.newInstance(accessToken);
                         break;
                 }
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, selectedFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
@@ -69,59 +69,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
-        //topArtistsTextView = findViewById(R.id.top_artists_text_view);
-
-        fetchTopArtists(accessToken);
     }
-
-    private void fetchTopArtists(String accessToken) {
-        final Request request = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/artists")
-                .addHeader("Authorization", "Bearer " + accessToken)
-                .build();
-
-        MainActivity.mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("HTTP", "Failed to fetch data: " + e);
-                Toast.makeText(HomeActivity.this, "Failed to fetch data, watch Logcat for more details",
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    String responseBody = response.body().string();
-                    JSONObject json = new JSONObject(responseBody);
-                    JSONArray items = json.getJSONArray("items");
-                    StringBuilder artists = new StringBuilder();
-                    for (int i = 0; i < items.length(); i++) {
-                        JSONObject artist = items.getJSONObject(i);
-                        String name = artist.getString("name");
-                        artists.append(name).append("\n");
-                    }
-                    final String topArtists = artists.toString();
-                    topArtistsTextView.setText(topArtists);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    topArtistsTextView.setText("Failed to parse top artists response");
-                }
-            }
-        });
-    }
-
-    /**
-     * Creates a UI thread to update a TextView in the background
-     * Reduces UI latency and makes the system perform more consistently
-     *
-     * @param text the text to set
-     * @param textView TextView object to update
-     */
-    private void setTextAsync(final String text, TextView textView) {
-        runOnUiThread(() -> textView.setText(text));
-    }
-
-
 
 }
