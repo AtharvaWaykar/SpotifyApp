@@ -105,8 +105,8 @@ public class TracksFragment extends Fragment {
                         JSONObject track = items.getJSONObject(i);
                         String name = track.getString("name");
                         tracks.append(name).append("\n");
-                        JSONArray images = track.getJSONArray("images");
-                        String imageUrl = images.getJSONObject(2).getString("url");
+                        JSONArray images = track.getJSONObject("album").getJSONArray("images");
+                        String imageUrl = images.getJSONObject(0).getString("url");
                         loadTrackImage(imageUrl, getTrackImageView(i));
                     }
                     final String topTracks = tracks.toString();
