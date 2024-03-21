@@ -37,7 +37,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/combined_button"
@@ -45,6 +46,52 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:text="Get Token, Code + Profile" />
+
+            <Button
+                android:id="@+id/get_top_songs_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Top 3 songs" />
+
+            <Button
+                android:id="@+id/song_button_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="Song 1" />
+
+            <Button
+                android:id="@+id/song_button_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Song 2" />
+
+            <Button
+                android:id="@+id/song_button_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Song 3" />
+
+            <TextView
+                android:id="@+id/top_songs_view1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                tools:text="Top Songs output" />
+
+            <TextView
+                android:id="@+id/top_songs_view2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                tools:text="Top Songs output" />
+
+            <TextView
+                android:id="@+id/top_songs_view3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                tools:text="Top Songs output" />
         </LinearLayout>
     </LinearLayout>
 
