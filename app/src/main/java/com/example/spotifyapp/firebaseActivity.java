@@ -5,9 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,7 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-public class MainActivity extends AppCompatActivity {
+public class firebaseActivity extends AppCompatActivity {
     TextView userName;
     Button logout;
     GoogleSignInClient gClient;
@@ -25,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.firebase_activity);
         logout = findViewById(R.id.logout);
         userName = findViewById(R.id.userName);
         gOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         finish();
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        startActivity(new Intent(firebaseActivity.this, LoginActivity.class));
                     }
                 });
             }
