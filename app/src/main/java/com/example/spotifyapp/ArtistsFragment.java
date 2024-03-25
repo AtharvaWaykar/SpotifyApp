@@ -30,6 +30,7 @@ import okhttp3.Response;
  * Use the {@link ArtistsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+//
 public class ArtistsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
