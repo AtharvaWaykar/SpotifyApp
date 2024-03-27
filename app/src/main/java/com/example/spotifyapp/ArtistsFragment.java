@@ -80,7 +80,7 @@ public class ArtistsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         viewPager = view.findViewById(R.id.view_pager_artists);
-        ArtistPagerAdapter adapter = new ArtistPagerAdapter(getChildFragmentManager(), getContext());
+        artistPagerAdapter = new ArtistPagerAdapter(getChildFragmentManager(), getContext());
         viewPager.setAdapter(artistPagerAdapter);
         artistText = view.findViewById(R.id.artist_textview);
         btnPrevious = view.findViewById(R.id.btn_previous);
@@ -119,7 +119,7 @@ public class ArtistsFragment extends Fragment {
                     getActivity().runOnUiThread(() -> {
                         artistPagerAdapter.setArtists(artistsList);
                         artistText.setText(artistsList.get(0).getName());
-                        loadArtistImage(artistsList.get(0).getImageUrl(), artistPagerAdapter.getCurrentImageView(viewPager.getCurrentItem()));
+                        loadArtistImage(artistsList.get(0).getImageUrl(), artistPagerAdapter.getCurrentImageView(0));
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();
