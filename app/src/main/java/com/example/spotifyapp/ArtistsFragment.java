@@ -3,11 +3,13 @@ package com.example.spotifyapp;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +21,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -33,14 +37,12 @@ import okhttp3.Response;
 //
 public class ArtistsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ACCESS_TOKEN = "ACCESS_TOKEN";
-
-    // TODO: Rename and change types of parameters
     private String accessToken;
-    TextView firstArtist, secondArtist, thirdArtist, fourthArtist, fifthArtist;
-    ImageView firstArtistImage, secondArtistImage, thirdArtistImage, fourthArtistImage, fifthArtistImage;
+    private ViewPager viewPager;
+    private ArtistPagerAdapter artistPagerAdapter;
+    private TextView artistText;
+    private ImageButton btnPrevious, btnNext;
 
     public ArtistsFragment() {
         // Required empty public constructor
@@ -77,7 +79,14 @@ public class ArtistsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        setComponents(view);
+        viewPager = view.findViewById(R.id.view_pager_artists);
+        ArtistPagerAdapter adapter = new ArtistPagerAdapter(getChildFragmentManager(), getContext());
+        viewPager.setAdapter(artistPagerAdapter);
+        artistText = view.findViewById(R.id.artist_textview);
+        btnPrevious = view.findViewById(R.id.btn_previous);
+        btnNext = view.findViewById(R.id.btn_next);
+        btnPrevious.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() - 1, true));
+        btnNext.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true));
         fetchTopArtists(accessToken);
     }
 
@@ -99,18 +108,19 @@ public class ArtistsFragment extends Fragment {
                     String responseBody = response.body().string();
                     JSONObject json = new JSONObject(responseBody);
                     JSONArray items = json.getJSONArray("items");
-                    StringBuilder artists = new StringBuilder();
+                    List<Artist> artistsList = new ArrayList<>();
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject artist = items.getJSONObject(i);
                         String name = artist.getString("name");
-                        artists.append(name).append("\n");
                         JSONArray images = artist.getJSONArray("images");
                         String imageUrl = images.getJSONObject(2).getString("url");
-                        loadArtistImage(imageUrl, getArtistImageView(i));
-
+                        artistsList.add(new Artist(name, imageUrl));
                     }
-                    final String topArtists = artists.toString();
-                    setArtistsText(topArtists);
+                    getActivity().runOnUiThread(() -> {
+                        artistPagerAdapter.setArtists(artistsList);
+                        artistText.setText(artistsList.get(0).getName());
+                        loadArtistImage(artistsList.get(0).getImageUrl(), artistPagerAdapter.getCurrentImageView(viewPager.getCurrentItem()));
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -127,53 +137,6 @@ public class ArtistsFragment extends Fragment {
         });
     }
 
-    private void setArtistsText(String topArtists) {
-        String[] artists = topArtists.split("\n");
-        setTextAsync("1. " + artists[0], firstArtist);
-        setTextAsync("2. " + artists[1], secondArtist);
-        setTextAsync("3. " + artists[2], thirdArtist);
-        setTextAsync("4. " + artists[3], fourthArtist);
-        setTextAsync("5. " + artists[4], fifthArtist);
-    }
-
-    // Helper method to get the appropriate ImageView based on index
-    private ImageView getArtistImageView(int index) {
-        switch (index) {
-            case 0:
-                return firstArtistImage;
-            case 1:
-                return secondArtistImage;
-            case 2:
-                return thirdArtistImage;
-            case 3:
-                return fourthArtistImage;
-            case 4:
-                return fifthArtistImage;
-            default:
-                return null;
-        }
-    }
-    private void setComponents(View view) {
-        firstArtist = (TextView) view.findViewById(R.id.first_artist_name);
-        secondArtist = (TextView) view.findViewById(R.id.second_artist_name);
-        thirdArtist = (TextView) view.findViewById(R.id.third_artist_name);
-        fourthArtist = (TextView) view.findViewById(R.id.fourth_artist_name);
-        fifthArtist = (TextView) view.findViewById(R.id.fifth_artist_name);
-        firstArtistImage = (ImageView) view.findViewById(R.id.first_artist_image);
-        secondArtistImage = (ImageView) view.findViewById(R.id.second_artist_image);
-        thirdArtistImage = (ImageView) view.findViewById(R.id.third_artist_image);
-        fourthArtistImage = (ImageView) view.findViewById(R.id.fourth_artist_image);
-        fifthArtistImage = (ImageView) view.findViewById(R.id.fifth_artist_image);
-    }
-
-    /**
-     * Creates a UI thread to update a TextView in the background
-     * Reduces UI latency and makes the system perform more consistently
-     *
-     * @param text the text to set
-     * @param textView TextView object to update
-     */
-    private void setTextAsync(final String text, TextView textView) {
-        getActivity().runOnUiThread(() -> textView.setText(text));
-    }
 }
+
+
