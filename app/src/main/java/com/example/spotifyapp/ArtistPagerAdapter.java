@@ -34,7 +34,7 @@ public class ArtistPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // Create a new placeholder fragment for the artist
         imageViews.add(new ImageView(context)); // Initialize ImageView with context
-        return ArtistsFragment.newInstance(artistsList.get(position).getImageUrl());
+        return DisplayedArtistFragment.newInstance(artistsList.get(position).getImageUrl());
     }
 
     @Override

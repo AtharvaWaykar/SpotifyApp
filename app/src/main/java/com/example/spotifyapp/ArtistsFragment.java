@@ -120,6 +120,7 @@ public class ArtistsFragment extends Fragment {
                         artistPagerAdapter.setArtists(artistsList);
                         artistText.setText(artistsList.get(0).getName());
                         loadArtistImage(artistsList.get(0).getImageUrl(), artistPagerAdapter.getCurrentImageView(0));
+
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -130,11 +131,9 @@ public class ArtistsFragment extends Fragment {
 
     // Helper method to load image into ImageView using Glide
     private void loadArtistImage(String imageUrl, ImageView imageView) {
-        getActivity().runOnUiThread(() -> {
-            Glide.with(getActivity())
-                    .load(imageUrl)
-                    .into(imageView);
-        });
+        Glide.with(getActivity())
+                .load(imageUrl)
+                .into(imageView);
     }
 
 }
