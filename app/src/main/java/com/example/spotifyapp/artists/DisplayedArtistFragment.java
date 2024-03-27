@@ -1,4 +1,4 @@
-package com.example.spotifyapp;
+package com.example.spotifyapp.artists;
 
 import android.os.Bundle;
 
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.spotifyapp.R;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,8 +44,8 @@ public class DisplayedArtistFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_displayed_artist, container, false);
-        artistImageView = view.findViewById(R.id.artist_imageview);
-        artistNameTextView = view.findViewById(R.id.artist_name_textview);
+        artistImageView = view.findViewById(R.id.track_imageview);
+        artistNameTextView = view.findViewById(R.id.track_name_textview);
         return view;
     }
 

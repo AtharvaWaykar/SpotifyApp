@@ -1,4 +1,4 @@
-package com.example.spotifyapp;
+package com.example.spotifyapp.artists;
 
 import android.os.Bundle;
 
@@ -11,16 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.spotifyapp.MainActivity;
+import com.example.spotifyapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,8 +75,8 @@ public class ArtistsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_artists, container, false);
         viewPager = view.findViewById(R.id.view_pager_artists);
         artistPagerAdapter = new ArtistPagerAdapter(getChildFragmentManager(), getContext());
-        btnPrevious = view.findViewById(R.id.btn_previous);
-        btnNext = view.findViewById(R.id.btn_next);
+        btnPrevious = view.findViewById(R.id.btn_previous_artists);
+        btnNext = view.findViewById(R.id.btn_next_artists);
         return view;
     }
 
@@ -122,12 +122,6 @@ public class ArtistsFragment extends Fragment {
                 }
             }
         });
-    }
-
-    private void loadArtistImage(String imageUrl, ImageView imageView) {
-        Glide.with(getActivity())
-                .load(imageUrl)
-                .into(imageView);
     }
 
 }

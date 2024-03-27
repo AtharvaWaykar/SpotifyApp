@@ -1,8 +1,6 @@
-package com.example.spotifyapp;
+package com.example.spotifyapp.artists;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

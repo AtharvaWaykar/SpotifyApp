@@ -1,4 +1,4 @@
-package com.example.spotifyapp;
+package com.example.spotifyapp.artists;
 
 public class Artist {
     private String name;
