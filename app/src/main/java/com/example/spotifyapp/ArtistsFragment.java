@@ -41,7 +41,6 @@ public class ArtistsFragment extends Fragment {
     private String accessToken;
     private ViewPager viewPager;
     private ArtistPagerAdapter artistPagerAdapter;
-    private TextView artistText;
     private ImageButton btnPrevious, btnNext;
 
     public ArtistsFragment() {
@@ -73,18 +72,17 @@ public class ArtistsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_artists, container, false);
+        View view = inflater.inflate(R.layout.fragment_artists, container, false);
+        viewPager = view.findViewById(R.id.view_pager_artists);
+        artistPagerAdapter = new ArtistPagerAdapter(getChildFragmentManager(), getContext());
+        btnPrevious = view.findViewById(R.id.btn_previous);
+        btnNext = view.findViewById(R.id.btn_next);
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        viewPager = view.findViewById(R.id.view_pager_artists);
-        artistPagerAdapter = new ArtistPagerAdapter(getChildFragmentManager(), getContext());
         viewPager.setAdapter(artistPagerAdapter);
-        artistText = view.findViewById(R.id.artist_textview);
-        btnPrevious = view.findViewById(R.id.btn_previous);
-        btnNext = view.findViewById(R.id.btn_next);
         btnPrevious.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() - 1, true));
         btnNext.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true));
         fetchTopArtists(accessToken);
@@ -118,9 +116,6 @@ public class ArtistsFragment extends Fragment {
                     }
                     getActivity().runOnUiThread(() -> {
                         artistPagerAdapter.setArtists(artistsList);
-                        artistText.setText(artistsList.get(0).getName());
-                        loadArtistImage(artistsList.get(0).getImageUrl(), artistPagerAdapter.getCurrentImageView(0));
-
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -129,7 +124,6 @@ public class ArtistsFragment extends Fragment {
         });
     }
 
-    // Helper method to load image into ImageView using Glide
     private void loadArtistImage(String imageUrl, ImageView imageView) {
         Glide.with(getActivity())
                 .load(imageUrl)

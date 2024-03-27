@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -18,14 +19,21 @@ import com.bumptech.glide.Glide;
  */
 public class DisplayedArtistFragment extends Fragment {
     private static final String ARG_IMAGE_URL = "image_url";
+    private static final String ARG_ARTIST_NAME = "artist_name";
+
+    private ImageView artistImageView;
+    private TextView artistNameTextView;
+    private String imageUrl;
+    private String artistName;
 
     public DisplayedArtistFragment() {
         // Required empty public constructor
     }
 
-    public static DisplayedArtistFragment newInstance(String imageUrl) {
+    public static DisplayedArtistFragment newInstance(String name, String imageUrl) {
         DisplayedArtistFragment fragment = new DisplayedArtistFragment();
         Bundle args = new Bundle();
+        args.putString(ARG_ARTIST_NAME, name);
         args.putString(ARG_IMAGE_URL, imageUrl);
         fragment.setArguments(args);
         return fragment;
@@ -34,16 +42,19 @@ public class DisplayedArtistFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_displayed_artist, container, false);
+        View view = inflater.inflate(R.layout.fragment_displayed_artist, container, false);
+        artistImageView = view.findViewById(R.id.artist_imageview);
+        artistNameTextView = view.findViewById(R.id.artist_name_textview);
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        ImageView artistImageView = view.findViewById(R.id.artist_imageview);
-        String imageUrl = getArguments().getString(ARG_IMAGE_URL);
+        imageUrl = getArguments().getString(ARG_IMAGE_URL);
+        artistName = getArguments().getString(ARG_ARTIST_NAME);
         loadImage(imageUrl, artistImageView);
+        artistNameTextView.setText(artistName);
     }
 
     private void loadImage(String imageUrl, ImageView imageView) {

@@ -15,26 +15,20 @@ import java.util.List;
 public class ArtistPagerAdapter extends FragmentPagerAdapter {
 
     private List<Artist> artistsList = new ArrayList<>();
-    private List<ImageView> imageViews = new ArrayList<>();
-    private Context context;
 
     public ArtistPagerAdapter(@NonNull FragmentManager fm, Context context) {
         super(fm);
-        this.context = context;
     }
 
     public void setArtists(List<Artist> artists) {
-        this.artistsList.clear();
-        this.artistsList.addAll(artists);
+        artistsList = artists;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        // Create a new placeholder fragment for the artist
-        imageViews.add(new ImageView(context)); // Initialize ImageView with context
-        return DisplayedArtistFragment.newInstance(artistsList.get(position).getImageUrl());
+        return DisplayedArtistFragment.newInstance(artistsList.get(position).getName(), artistsList.get(position).getImageUrl());
     }
 
     @Override
@@ -42,20 +36,6 @@ public class ArtistPagerAdapter extends FragmentPagerAdapter {
         return artistsList.size();
     }
 
-    // Method to update the ImageView with the loaded image
-    public void updateImageView(int position, ImageView imageView) {
-        if (position >= 0 && position < imageViews.size()) {
-            imageViews.set(position, imageView);
-        }
-    }
-
-    // Method to retrieve the ImageView for the current artist
-    public ImageView getCurrentImageView(int position) {
-        if (position >= 0 && position < imageViews.size()) {
-            return imageViews.get(position);
-        }
-        return null;
-    }
 }
 
 
