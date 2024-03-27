@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".firebaseActivity"
             android:exported="false" />
     </application>
 
