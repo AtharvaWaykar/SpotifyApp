@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">SpotifyApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_artists">Hello artists fragment</string>
+    <string name="hello_tracks">Hello tracks fragment</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
