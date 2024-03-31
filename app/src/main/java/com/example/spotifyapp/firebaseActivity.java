@@ -34,6 +34,7 @@ public class firebaseActivity extends AppCompatActivity {
             String gName = gAccount.getDisplayName();
             userName.setText(gName);
         }
+        startActivity(new Intent(firebaseActivity.this, MainActivity.class));
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
