@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.media.AudioAttributes;
+import android.media.MediaPlayer;
 
 import com.bumptech.glide.Glide;
 import com.example.spotifyapp.MainActivity;
@@ -42,6 +44,8 @@ public class ArtistsFragment extends Fragment {
     private ViewPager viewPager;
     private ArtistPagerAdapter artistPagerAdapter;
     private ImageButton btnPrevious, btnNext;
+    private List<Artist> artistsList;
+
 
     public ArtistsFragment() {
         // Required empty public constructor
@@ -77,6 +81,8 @@ public class ArtistsFragment extends Fragment {
         artistPagerAdapter = new ArtistPagerAdapter(getChildFragmentManager(), getContext());
         btnPrevious = view.findViewById(R.id.btn_previous_artists);
         btnNext = view.findViewById(R.id.btn_next_artists);
+
+        artistsList = new ArrayList<>();
         return view;
     }
 
@@ -106,7 +112,7 @@ public class ArtistsFragment extends Fragment {
                     String responseBody = response.body().string();
                     JSONObject json = new JSONObject(responseBody);
                     JSONArray items = json.getJSONArray("items");
-                    List<Artist> artistsList = new ArrayList<>();
+
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject artist = items.getJSONObject(i);
                         String name = artist.getString("name");

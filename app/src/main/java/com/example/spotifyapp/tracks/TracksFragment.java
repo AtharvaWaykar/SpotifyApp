@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.media.AudioAttributes;
-import android.media.AudioManager;
+
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,9 +46,9 @@ public class TracksFragment extends Fragment {
     private ViewPager viewPager;
     private TrackPagerAdapter trackPagerAdapter;
     private ImageButton btnPrevious, btnNext;
-    private MediaPlayer mediaPlayer;
-    List<Track> tracksList;
-    private boolean playing;
+    public static MediaPlayer mediaPlayer = null;
+    public  static List<Track> tracksList;
+    public  static boolean playing;
 
 
     public TracksFragment() {
@@ -76,14 +76,14 @@ public class TracksFragment extends Fragment {
         super.onCreate(savedInstanceState);
         accessToken = getArguments().getString(ARG_ACCESS_TOKEN);
 
-        // Initialize media player
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioAttributes(
-                new AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .setUsage(AudioAttributes.USAGE_MEDIA)
-                        .build()
-        );
+//        // Initialize media player
+//        mediaPlayer = new MediaPlayer();
+//        mediaPlayer.setAudioAttributes(
+//                new AudioAttributes.Builder()
+//                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+//                        .setUsage(AudioAttributes.USAGE_MEDIA)
+//                        .build()
+//        );
     }
 
     @Override
@@ -193,6 +193,9 @@ public class TracksFragment extends Fragment {
 
 
         btnPrevious.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() - 1, false));
+
+
+
         btnNext.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, false));
 
     }
