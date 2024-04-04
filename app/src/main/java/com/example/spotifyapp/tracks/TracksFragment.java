@@ -84,8 +84,8 @@ public class TracksFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         viewPager.setAdapter(trackPagerAdapter);
-        btnPrevious.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() - 1, true));
-        btnNext.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true));
+        btnPrevious.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() - 1, false));
+        btnNext.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, false));
         fetchTopTracks(accessToken);
     }
 

@@ -4,6 +4,8 @@
      <item name = "colorPrimaryVariant">@color/lavender</item>
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/black</item>
+
     </style>
 
     <style name="Theme.SpotifyApp" parent="Base.Theme.SpotifyApp" />

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/pagebkg"
     android:gravity="center">
 
     <!-- ImageView to display artist image -->
@@ -20,8 +21,9 @@
         android:layout_below="@id/track_imageview"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="Artist Name"
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:text="Track Name"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="30sp" />
 
 </RelativeLayout>

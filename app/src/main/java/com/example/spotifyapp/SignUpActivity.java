@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private EditText signupEmail, signupPassword;
@@ -31,6 +33,12 @@ public class SignUpActivity extends AppCompatActivity {
         signupPassword = findViewById(R.id.signup_password);
         signupButton = findViewById(R.id.signup_button);
         loginRedirectText = findViewById(R.id.loginRedirectText);
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+            finish();
+        }
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
