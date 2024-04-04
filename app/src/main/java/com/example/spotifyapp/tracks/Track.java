@@ -3,10 +3,11 @@ package com.example.spotifyapp.tracks;
 public class Track {
     private String name;
     private String imageUrl;
-
-    Track(String name, String imageUrl) {
+private String previewUrl;
+    Track(String name, String imageUrl, String previewUrl) {
         this.name = name;
         this.imageUrl = imageUrl;
+        this.previewUrl = previewUrl;
     }
 
     public String getName() {
@@ -15,5 +16,9 @@ public class Track {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getPreviewUrl() {
+        return previewUrl;
     }
 }

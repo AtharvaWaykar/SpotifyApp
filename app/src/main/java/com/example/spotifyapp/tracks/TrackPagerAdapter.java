@@ -26,7 +26,7 @@ public class TrackPagerAdapter extends FragmentPagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        return DisplayedTrackFragment.newInstance(tracksList.get(position).getName(), tracksList.get(position).getImageUrl());
+        return DisplayedTrackFragment.newInstance(tracksList.get(position).getName(), tracksList.get(position).getImageUrl(), tracksList.get(position).getPreviewUrl());
     }
 
     @Override
