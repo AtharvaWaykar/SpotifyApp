@@ -107,6 +107,8 @@ public class TracksFragment extends Fragment {
 
         viewPager.setAdapter(trackPagerAdapter);
 
+
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -117,9 +119,10 @@ public class TracksFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 // This method will be invoked when a new page becomes selected
-                // 'position' parameter will provide you the current position of ViewPager
                 Log.d("ViewPagerPosition", "Current position: " + position);
 
+
+                System.out.println("Current Position =" + position);
                 // Check if tracksList is initialized and not empty
                 if (tracksList != null && !tracksList.isEmpty()) {
                     if (!playing) {
@@ -181,14 +184,17 @@ public class TracksFragment extends Fragment {
                     // Handle the case when tracksList is not initialized or empty
                     Log.e("ViewPagerPosition", "tracksList is not initialized or empty");
                 }
+
+
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
                 // This method will be invoked when the scroll state changes
-                // You can add your code here if needed
             }
         });
+
+        System.out.println("Current Page = " + viewPager.getCurrentItem());
 
 
 
@@ -231,6 +237,11 @@ public class TracksFragment extends Fragment {
                     getActivity().runOnUiThread(() -> {
                         trackPagerAdapter.setTracks(tracksList);
                     });
+
+
+
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

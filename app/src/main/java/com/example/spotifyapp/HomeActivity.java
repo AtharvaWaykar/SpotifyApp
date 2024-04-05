@@ -65,28 +65,6 @@ public class HomeActivity extends AppCompatActivity {
                     case 1:
                         selectedFragment = tracksFragment;
 
-                        //System.out.println("Track one name " + TracksFragment.tracksList.get(1).getName());
-
-//
-//                        try {
-//                            TracksFragment.mediaPlayer.setDataSource(TracksFragment.tracksList.get(0).getPreviewUrl());
-//                        } catch (IOException e) {
-//                            System.out.println("error song 3 set data source");
-//                            throw new RuntimeException(e);
-//                        }
-//                        try {
-//                            TracksFragment.mediaPlayer.prepare(); // might take long! (for buffering, etc)
-//                            System.out.println(TracksFragment.tracksList.get(0).getName() + " is prepared!");
-//                        } catch (IOException e) {
-//                            System.out.println("error song 3 prepare");
-//                            throw new RuntimeException(e);
-//                        }
-//
-//                        TracksFragment.mediaPlayer.start();
-//                        System.out.println("SONG SHOULD BE PLAYING: " + TracksFragment.tracksList.get(0).getName());
-//                        TracksFragment.playing = true;
-
-
                         break;
                 }
 
