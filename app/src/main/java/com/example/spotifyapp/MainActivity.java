@@ -9,13 +9,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -23,7 +26,8 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
 
     public static final String CLIENT_ID = "bcac1ff3762a400f80669cc131690aa7";
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int AUTH_TOKEN_REQUEST_CODE = 0;
     public static final int AUTH_CODE_REQUEST_CODE = 1;
+    private FirebaseAuth auth;
 
     public static final OkHttpClient mOkHttpClient = new OkHttpClient();
     private String mAccessToken, mAccessCode;
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         tokenTextView = (TextView) findViewById(R.id.token_text_view);
         codeTextView = (TextView) findViewById(R.id.code_text_view);
         profileTextView = (TextView) findViewById(R.id.response_text_view);
+        auth = FirebaseAuth.getInstance();
 
         // Initialize the buttons
         Button tokenBtn = (Button) findViewById(R.id.token_btn);
@@ -54,17 +60,25 @@ public class MainActivity extends AppCompatActivity {
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
         Button nextBtn = (Button) findViewById(R.id.next_btn);
         // Set the click listeners for the buttons
+        getToken();
 
         tokenBtn.setOnClickListener((v) -> {
-            getToken();
-        });
-
-        codeBtn.setOnClickListener((v) -> {
             getCode();
         });
 
+        codeBtn.setOnClickListener((v) -> {
+            //getCode();
+        });
+
         profileBtn.setOnClickListener((v) -> {
-            onGetUserProfileClicked();
+            FirebaseUser currentUser = auth.getCurrentUser();
+            currentUser = null;
+            auth.signOut();
+
+            Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+            intent.putExtra("ACCESS_TOKEN", mAccessToken);
+            startActivity(intent);
+
         });
 
         nextBtn.setOnClickListener((v) -> {
@@ -108,11 +122,11 @@ public class MainActivity extends AppCompatActivity {
         // Check which request code is present (if any)
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
             mAccessToken = response.getAccessToken();
-            setTextAsync(mAccessToken, tokenTextView);
+            //setTextAsync(mAccessToken, tokenTextView);
 
         } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
             mAccessCode = response.getCode();
-            setTextAsync(mAccessCode, codeTextView);
+            //setTextAsync(mAccessCode, codeTextView);
         }
     }
 
