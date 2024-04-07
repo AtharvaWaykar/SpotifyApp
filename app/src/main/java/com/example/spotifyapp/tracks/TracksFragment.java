@@ -224,7 +224,7 @@ public class TracksFragment extends Fragment {
                     String responseBody = response.body().string();
                     JSONObject json = new JSONObject(responseBody);
                     JSONArray items = json.getJSONArray("items");
-
+                    tracksList.add(new Track("top5tracks", null, ""));
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject track = items.getJSONObject(i);
                         String name = track.getString("name");

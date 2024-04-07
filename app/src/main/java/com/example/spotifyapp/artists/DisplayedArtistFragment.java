@@ -55,12 +55,19 @@ public class DisplayedArtistFragment extends Fragment {
         imageUrl = getArguments().getString(ARG_IMAGE_URL);
         artistName = getArguments().getString(ARG_ARTIST_NAME);
         loadImage(imageUrl, artistImageView);
-        artistNameTextView.setText(artistName);
     }
 
     private void loadImage(String imageUrl, ImageView imageView) {
-        Glide.with(requireContext())
-                .load(imageUrl)
-                .into(imageView);
+        if (imageUrl != null) {
+            Glide.with(requireContext())
+                    .load(imageUrl)
+                    .into(imageView);
+            artistNameTextView.setText(artistName);
+        } else {
+            int resourceId = getResources().getIdentifier(artistName, "drawable", requireContext().getPackageName());
+            imageView.setImageResource(resourceId);
+            artistNameTextView.setText("");
+
+        }
     }
 }

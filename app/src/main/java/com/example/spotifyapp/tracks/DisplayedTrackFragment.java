@@ -56,17 +56,25 @@ public class DisplayedTrackFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         imageUrl = getArguments().getString(ARG_IMAGE_URL);
+
         trackName = getArguments().getString(ARG_ARTIST_NAME);
         previewUrl = getArguments().getString(ARG_PREVIEW_URL);
         System.out.println("Song name: " + trackName);
         System.out.println("Load image");
         loadImage(imageUrl, trackImageView);
-        trackNameTextView.setText(trackName);
+
     }
 
     private void loadImage(String imageUrl, ImageView imageView) {
-        Glide.with(requireContext())
-                .load(imageUrl)
-                .into(imageView);
+        if (imageUrl != null) {
+            Glide.with(requireContext())
+                    .load(imageUrl)
+                    .into(imageView);
+            trackNameTextView.setText(trackName);
+        } else {
+            int resourceId = getResources().getIdentifier(trackName, "drawable", requireContext().getPackageName());
+            imageView.setImageResource(resourceId);
+            trackNameTextView.setText("");
+        }
     }
 }

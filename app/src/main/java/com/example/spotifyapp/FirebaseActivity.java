@@ -16,7 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-public class firebaseActivity extends AppCompatActivity {
+public class FirebaseActivity extends AppCompatActivity {
     TextView userName;
     Button logout;
     GoogleSignInClient gClient;
@@ -34,7 +34,7 @@ public class firebaseActivity extends AppCompatActivity {
             String gName = gAccount.getDisplayName();
             userName.setText(gName);
         }
-        startActivity(new Intent(firebaseActivity.this, MainActivity.class));
+        startActivity(new Intent(FirebaseActivity.this, MainActivity.class));
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -42,7 +42,7 @@ public class firebaseActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         finish();
-                        startActivity(new Intent(firebaseActivity.this, LoginActivity.class));
+                        startActivity(new Intent(FirebaseActivity.this, LoginActivity.class));
                     }
                 });
             }

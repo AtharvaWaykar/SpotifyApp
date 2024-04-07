@@ -17,6 +17,7 @@ import android.media.MediaPlayer;
 import com.bumptech.glide.Glide;
 import com.example.spotifyapp.MainActivity;
 import com.example.spotifyapp.R;
+import com.example.spotifyapp.tracks.Track;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -112,7 +113,7 @@ public class ArtistsFragment extends Fragment {
                     String responseBody = response.body().string();
                     JSONObject json = new JSONObject(responseBody);
                     JSONArray items = json.getJSONArray("items");
-
+                    artistsList.add(new Artist("top5artists", null));
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject artist = items.getJSONObject(i);
                         String name = artist.getString("name");

@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".firebaseActivity"
+            android:name=".FirebaseActivity"
             android:exported="false" />
     </application>
 
