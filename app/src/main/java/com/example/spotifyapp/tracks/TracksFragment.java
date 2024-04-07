@@ -124,7 +124,7 @@ public class TracksFragment extends Fragment {
 
                 System.out.println("Current Position =" + position);
                 // Check if tracksList is initialized and not empty
-                if (tracksList != null && !tracksList.isEmpty()) {
+                if (tracksList != null && !tracksList.isEmpty() && position > 0) {
                     if (!playing) {
 
                         mediaPlayer = new MediaPlayer();
@@ -183,6 +183,13 @@ public class TracksFragment extends Fragment {
                 } else {
                     // Handle the case when tracksList is not initialized or empty
                     Log.e("ViewPagerPosition", "tracksList is not initialized or empty");
+                }
+
+                if (playing && position == 0) {
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    mediaPlayer = null;
+                    playing = false;
                 }
 
 
