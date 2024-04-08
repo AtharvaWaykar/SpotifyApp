@@ -28,6 +28,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.annotation.NonNull;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String CLIENT_ID = "bcac1ff3762a400f80669cc131690aa7";
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public static final OkHttpClient mOkHttpClient = new OkHttpClient();
     private String mAccessToken, mAccessCode;
     private Call mCall;
+    private int deleteCounter = 0;
 
     private TextView tokenTextView, codeTextView, profileTextView;
 
@@ -67,7 +74,35 @@ public class MainActivity extends AppCompatActivity {
         });
 
         codeBtn.setOnClickListener((v) -> {
-            //getCode();
+            deleteCounter++;
+            if (deleteCounter % 2 != 0) {
+                Toast.makeText(MainActivity.this, "Are you sure?", Toast.LENGTH_LONG).show();
+
+            } else {
+                FirebaseUser currentUser = auth.getCurrentUser();
+                currentUser.delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                // Account deleted successfully
+                                Toast.makeText(MainActivity.this, "Firebase account deleted successfully", Toast.LENGTH_SHORT).show();
+                                // Perform sign out
+                                auth.signOut();
+                                Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                                intent.putExtra("ACCESS_TOKEN", mAccessToken);
+                                startActivity(intent);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Failed to delete account
+                                Toast.makeText(MainActivity.this, "You need to logout and login first", Toast.LENGTH_SHORT).show();
+                                System.out.println(e.getMessage());
+                            }
+                        });
+            }
+
         });
 
         profileBtn.setOnClickListener((v) -> {
