@@ -21,21 +21,24 @@ import com.example.spotifyapp.R;
 public class DisplayedTrackFragment extends Fragment {
     private static final String ARG_IMAGE_URL = "image_url";
     private static final String ARG_ARTIST_NAME = "track_name";
+    private static final String ARG_PREVIEW_URL = "preview_url";
 
     private ImageView trackImageView;
     private TextView trackNameTextView;
     private String imageUrl;
     private String trackName;
+    private String previewUrl;
 
     public DisplayedTrackFragment() {
         // Required empty public constructor
     }
 
-    public static DisplayedTrackFragment newInstance(String name, String imageUrl) {
+    public static DisplayedTrackFragment newInstance(String name, String imageUrl, String previewUrl) {
         DisplayedTrackFragment fragment = new DisplayedTrackFragment();
         Bundle args = new Bundle();
         args.putString(ARG_ARTIST_NAME, name);
         args.putString(ARG_IMAGE_URL, imageUrl);
+        args.putString(ARG_PREVIEW_URL, previewUrl);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,14 +56,25 @@ public class DisplayedTrackFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         imageUrl = getArguments().getString(ARG_IMAGE_URL);
+
         trackName = getArguments().getString(ARG_ARTIST_NAME);
+        previewUrl = getArguments().getString(ARG_PREVIEW_URL);
+        System.out.println("Song name: " + trackName);
+        System.out.println("Load image");
         loadImage(imageUrl, trackImageView);
-        trackNameTextView.setText(trackName);
+
     }
 
     private void loadImage(String imageUrl, ImageView imageView) {
-        Glide.with(requireContext())
-                .load(imageUrl)
-                .into(imageView);
+        if (imageUrl != null) {
+            Glide.with(requireContext())
+                    .load(imageUrl)
+                    .into(imageView);
+            trackNameTextView.setText(trackName);
+        } else {
+            int resourceId = getResources().getIdentifier(trackName, "drawable", requireContext().getPackageName());
+            imageView.setImageResource(resourceId);
+            trackNameTextView.setText("");
+        }
     }
 }

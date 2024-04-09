@@ -4,12 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.media.AudioAttributes;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
 import com.example.spotifyapp.artists.ArtistsFragment;
 import com.example.spotifyapp.tracks.TracksFragment;
 import com.google.android.material.tabs.TabLayout;
+
+import java.io.IOException;
 
 public class HomeActivity extends AppCompatActivity {
     private String accessToken;
@@ -29,13 +33,38 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Fragment selectedFragment = null;
+
+
+                Fragment artistsFragment = ArtistsFragment.newInstance(accessToken);
+                Fragment tracksFragment = TracksFragment.newInstance(accessToken);
+
+                Fragment selectedFragment = artistsFragment;
+
                 switch (tab.getPosition()) {
                     case 0:
-                        selectedFragment = ArtistsFragment.newInstance(accessToken);
+                        selectedFragment = artistsFragment;
+
+                        if (TracksFragment.mediaPlayer != null) {
+                            TracksFragment.mediaPlayer.stop();
+                            TracksFragment.mediaPlayer.release();
+                            TracksFragment.mediaPlayer = null;
+                        }
+
+                        // Initialize media player
+                        TracksFragment.mediaPlayer = new MediaPlayer();
+                        TracksFragment.mediaPlayer.setAudioAttributes(
+                                new AudioAttributes.Builder()
+                                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                                        .build()
+                        );
+
+
+
                         break;
                     case 1:
-                        selectedFragment = TracksFragment.newInstance(accessToken);
+                        selectedFragment = tracksFragment;
+
                         break;
                 }
 

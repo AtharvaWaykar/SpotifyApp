@@ -5,6 +5,9 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.media.AudioAttributes;
+
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +46,10 @@ public class TracksFragment extends Fragment {
     private ViewPager viewPager;
     private TrackPagerAdapter trackPagerAdapter;
     private ImageButton btnPrevious, btnNext;
+    public static MediaPlayer mediaPlayer = null;
+    public  static List<Track> tracksList;
+    public  static boolean playing;
+
 
     public TracksFragment() {
         // Required empty public constructor
@@ -68,6 +75,15 @@ public class TracksFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         accessToken = getArguments().getString(ARG_ACCESS_TOKEN);
+
+//        // Initialize media player
+//        mediaPlayer = new MediaPlayer();
+//        mediaPlayer.setAudioAttributes(
+//                new AudioAttributes.Builder()
+//                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+//                        .setUsage(AudioAttributes.USAGE_MEDIA)
+//                        .build()
+//        );
     }
 
     @Override
@@ -78,15 +94,123 @@ public class TracksFragment extends Fragment {
         trackPagerAdapter = new TrackPagerAdapter(getChildFragmentManager(), getContext());
         btnPrevious = view.findViewById(R.id.btn_previous_tracks);
         btnNext = view.findViewById(R.id.btn_next_tracks);
+
+        tracksList = new ArrayList<>();
+
+        playing = false;
         return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        viewPager.setAdapter(trackPagerAdapter);
-        btnPrevious.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() - 1, false));
-        btnNext.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, false));
         fetchTopTracks(accessToken);
+
+        viewPager.setAdapter(trackPagerAdapter);
+
+
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // This method will be invoked when the ViewPager is scrolled
+                // You can add your code here if needed
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                // This method will be invoked when a new page becomes selected
+                Log.d("ViewPagerPosition", "Current position: " + position);
+
+
+                System.out.println("Current Position =" + position);
+                // Check if tracksList is initialized and not empty
+                if (tracksList != null && !tracksList.isEmpty() && position > 0) {
+                    if (!playing) {
+
+                        mediaPlayer = new MediaPlayer();
+                        mediaPlayer.setAudioAttributes(
+                                new AudioAttributes.Builder()
+                                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                                        .build()
+                        );
+
+                        try {
+                            mediaPlayer.setDataSource(tracksList.get(position).getPreviewUrl());
+                        } catch (IOException e) {
+                            System.out.println("error song 3 set data source");
+                            throw new RuntimeException(e);
+                        }
+                        try {
+                            mediaPlayer.prepare(); // might take long! (for buffering, etc)
+                        } catch (IOException e) {
+                            System.out.println("error song 3 prepare");
+                            throw new RuntimeException(e);
+                        }
+                        mediaPlayer.start();
+                        System.out.println("SONG SHOULD BE PLAYING: " + tracksList.get(position).getName());
+                        playing = true;
+                    } else {
+                        mediaPlayer.stop();
+                        mediaPlayer.release();
+                        mediaPlayer = null;
+
+                        mediaPlayer = new MediaPlayer();
+                        mediaPlayer.setAudioAttributes(
+                                new AudioAttributes.Builder()
+                                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                                        .build()
+                        );
+
+                        try {
+                            mediaPlayer.setDataSource(tracksList.get(position).getPreviewUrl());
+                        } catch (IOException e) {
+                            System.out.println("error song 3 set data source");
+                            throw new RuntimeException(e);
+                        }
+                        try {
+                            mediaPlayer.prepare(); // might take long! (for buffering, etc)
+                        } catch (IOException e) {
+                            System.out.println("error song 3 prepare");
+                            throw new RuntimeException(e);
+                        }
+                        mediaPlayer.start();
+                        System.out.println("SONG SHOULD BE PLAYING: " + tracksList.get(position).getName());
+                        playing = true;
+
+                    }
+                } else {
+                    // Handle the case when tracksList is not initialized or empty
+                    Log.e("ViewPagerPosition", "tracksList is not initialized or empty");
+                }
+
+                if (playing && position == 0) {
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    mediaPlayer = null;
+                    playing = false;
+                }
+
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                // This method will be invoked when the scroll state changes
+            }
+        });
+
+        System.out.println("Current Page = " + viewPager.getCurrentItem());
+
+
+
+        btnPrevious.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() - 1, false));
+
+
+
+        btnNext.setOnClickListener(v -> viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, false));
+
     }
 
     private void fetchTopTracks(String accessToken) {
@@ -107,17 +231,24 @@ public class TracksFragment extends Fragment {
                     String responseBody = response.body().string();
                     JSONObject json = new JSONObject(responseBody);
                     JSONArray items = json.getJSONArray("items");
-                    List<Track> tracksList = new ArrayList<>();
+                    tracksList.add(new Track("top5tracks", null, ""));
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject track = items.getJSONObject(i);
                         String name = track.getString("name");
                         JSONArray images = track.getJSONObject("album").getJSONArray("images");
                         String imageUrl = images.getJSONObject(0).getString("url");
-                        tracksList.add(new Track(name, imageUrl));
+
+                        String previewUrl = track.getString("preview_url");
+                        tracksList.add(new Track(name, imageUrl, previewUrl));
                     }
                     getActivity().runOnUiThread(() -> {
                         trackPagerAdapter.setTracks(tracksList);
                     });
+
+
+
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
