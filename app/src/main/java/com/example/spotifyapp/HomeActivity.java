@@ -18,7 +18,7 @@ import com.google.android.material.tabs.TabLayout;
 import java.io.IOException;
 
 public class HomeActivity extends AppCompatActivity {
-    private String accessToken;
+    private String accessToken, timeRange;
     private FrameLayout fragmentContainer;
     private TabLayout tabLayout;
     private Button backBtn;
@@ -28,10 +28,12 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         accessToken = getIntent().getStringExtra("ACCESS_TOKEN");
+        timeRange = getIntent().getStringExtra("TIME_RANGE");
+
         fragmentContainer = (FrameLayout) findViewById(R.id.fragmentContainer);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         backBtn = (Button) findViewById(R.id.back_to_welcome_btn);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, ArtistsFragment.newInstance(accessToken))
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, ArtistsFragment.newInstance(accessToken, timeRange))
                 .addToBackStack(null)
                 .commit();
 
@@ -41,7 +43,7 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
+        System.out.println("TIME RANGE IS: " + timeRange);
 
 
 
@@ -50,8 +52,8 @@ public class HomeActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
 
 
-                Fragment artistsFragment = ArtistsFragment.newInstance(accessToken);
-                Fragment tracksFragment = TracksFragment.newInstance(accessToken);
+                Fragment artistsFragment = ArtistsFragment.newInstance(accessToken, timeRange);
+                Fragment tracksFragment = TracksFragment.newInstance(accessToken, timeRange);
 
                 Fragment selectedFragment = artistsFragment;
 

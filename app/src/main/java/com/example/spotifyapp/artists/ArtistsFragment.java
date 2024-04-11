@@ -40,8 +40,7 @@ import okhttp3.Response;
 //
 public class ArtistsFragment extends Fragment {
 
-    private static final String ARG_ACCESS_TOKEN = "ACCESS_TOKEN";
-    private String accessToken;
+    private String accessToken, timeRange;
     private ViewPager viewPager;
     private ArtistPagerAdapter artistPagerAdapter;
     private ImageButton btnPrevious, btnNext;
@@ -60,10 +59,11 @@ public class ArtistsFragment extends Fragment {
      * @return A new instance of fragment ArtistsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ArtistsFragment newInstance(String accessToken) {
+    public static ArtistsFragment newInstance(String accessToken, String timeRange) {
         ArtistsFragment fragment = new ArtistsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_ACCESS_TOKEN, accessToken);
+        args.putString("ACCESS_TOKEN", accessToken);
+        args.putString("TIME_RANGE", timeRange);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,7 +71,8 @@ public class ArtistsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        accessToken = getArguments().getString(ARG_ACCESS_TOKEN);
+        accessToken = getArguments().getString("ACCESS_TOKEN");
+        timeRange = getArguments().getString("TIME_RANGE");
     }
 
     @Override
@@ -97,7 +98,7 @@ public class ArtistsFragment extends Fragment {
 
     private void fetchTopArtists(String accessToken) {
         final Request request = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/artists?limit=5")
+                .url("https://api.spotify.com/v1/me/top/artists?limit=5&time_range=" + timeRange)
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .build();
 

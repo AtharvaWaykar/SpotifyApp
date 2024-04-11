@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.firebase.FirebaseApp;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -17,20 +18,10 @@ import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import java.io.IOException;
 
 import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,7 +29,6 @@ import com.google.firebase.database.ValueEventListener;
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import androidx.annotation.NonNull;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,11 +40,12 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
 
     public static final OkHttpClient mOkHttpClient = new OkHttpClient();
-    private String mAccessToken, mAccessCode;
+    private String mAccessToken, mAccessCode, timeRange;
     private Call mCall;
     private int deleteCounter = 0;
 
-    private TextView tokenTextView, codeTextView, profileTextView;
+    private TextView tokenTextView, codeTextView;
+    private RadioButton oneMonth, sixMonths, year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,17 +55,30 @@ public class MainActivity extends AppCompatActivity {
         // Initialize the views
         tokenTextView = (TextView) findViewById(R.id.token_text_view);
         codeTextView = (TextView) findViewById(R.id.code_text_view);
-        profileTextView = (TextView) findViewById(R.id.response_text_view);
-        auth = FirebaseAuth.getInstance();
-
+        oneMonth = (RadioButton) findViewById(R.id.oneMonth_radio);
+        sixMonths = (RadioButton) findViewById(R.id.sixMonths_radio);
+        year = (RadioButton) findViewById(R.id.year_radio);
         // Initialize the buttons
         Button tokenBtn = (Button) findViewById(R.id.token_btn);
         Button codeBtn = (Button) findViewById(R.id.code_btn);
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
         Button nextBtn = (Button) findViewById(R.id.next_btn);
-        // Set the click listeners for the buttons
+
+        auth = FirebaseAuth.getInstance();
         getToken();
 
+        timeRange = "short_term";
+        oneMonth.setOnClickListener((v) -> {
+            timeRange = "short_term";
+        });
+
+        sixMonths.setOnClickListener((v) -> {
+            timeRange = "medium_term";
+        });
+
+        year.setOnClickListener((v) -> {
+            timeRange = "long_term";
+        });
         tokenBtn.setOnClickListener((v) -> {
             getCode();
         });
@@ -123,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         nextBtn.setOnClickListener((v) -> {
-            test();
+            goHomeActivity();
         });
 
     }
@@ -224,51 +228,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    /**
-     * Get user profile
-     * This method will get the user profile using the token
-     */
-    public void onGetUserProfileClicked() {
-        if (mAccessToken == null) {
-            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Create a request to get the user profile
-        final Request request = new Request.Builder()
-                .url("https://api.spotify.com/v1/me")
-                .addHeader("Authorization", "Bearer " + mAccessToken)
-                .build();
-
-        cancelCall();
-        mCall = mOkHttpClient.newCall(request);
-
-        mCall.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("HTTP", "Failed to fetch data: " + e);
-                Toast.makeText(MainActivity.this, "Failed to fetch data, watch Logcat for more details",
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    final JSONObject jsonObject = new JSONObject(response.body().string());
-                    setTextAsync(jsonObject.toString(3), profileTextView);
-                } catch (JSONException e) {
-                    Log.d("JSON", "Failed to parse data: " + e);
-                    Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    public void test() {
+    public void goHomeActivity() {
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
         intent.putExtra("ACCESS_TOKEN", mAccessToken);
+        intent.putExtra("TIME_RANGE", timeRange);
         startActivity(intent);
     }
 
@@ -296,6 +259,7 @@ public class MainActivity extends AppCompatActivity {
                 .setCampaign("your-campaign-token")
                 .build();
     }
+
 
     /**
      * Gets the redirect Uri for Spotify
