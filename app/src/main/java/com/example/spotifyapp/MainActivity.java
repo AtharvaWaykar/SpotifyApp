@@ -32,7 +32,10 @@ import okhttp3.Response;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import androidx.annotation.NonNull;
@@ -166,13 +169,37 @@ public class MainActivity extends AppCompatActivity {
 
             mAccessCode = response.getCode();
             saveAccessCodeToFirebase(mAccessCode);
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("message");
+            listenForAccessCodeChanges();
 
-            myRef.setValue("this sdjkdg");
             //setTextAsync(mAccessCode, codeTextView);
         }
     }
+    private void listenForAccessCodeChanges() {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
+            userRef.child("accessCode").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String accessCode = snapshot.getValue(String.class);
+                    if (accessCode != null) {
+                        Log.d("Firebase", "Access code retrieved from Firebase: " + accessCode);
+                        // Now you can do whatever you want with the access code
+                        // For example, you can set it to a variable or use it directly
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("Firebase", "Failed to retrieve access code from Firebase: " + error.getMessage());
+                }
+            });
+        } else {
+            Log.e("Firebase", "User is null, cannot listen for access code changes from Firebase");
+        }
+    }
+
 
     private void saveAccessCodeToFirebase(String accessCode) {
         FirebaseUser currentUser = auth.getCurrentUser();
