@@ -8,6 +8,9 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.spotify.sdk.android.auth.AuthorizationClient;
@@ -160,10 +163,40 @@ public class MainActivity extends AppCompatActivity {
             //setTextAsync(mAccessToken, tokenTextView);
 
         } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
+
             mAccessCode = response.getCode();
+            saveAccessCodeToFirebase(mAccessCode);
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference("message");
+
+            myRef.setValue("this sdjkdg");
             //setTextAsync(mAccessCode, codeTextView);
         }
     }
+
+    private void saveAccessCodeToFirebase(String accessCode) {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
+            userRef.child("accessCode").setValue(accessCode)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.d("Firebase", "Access code saved successfully to Firebase");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("Firebase", "Failed to save access code to Firebase: " + e.getMessage());
+                        }
+                    });
+        } else {
+            Log.e("Firebase", "User is null, cannot save access code to Firebase");
+        }
+    }
+
 
     /**
      * Get user profile
