@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.example.spotifyapp.artists.ArtistsFragment;
@@ -19,6 +21,7 @@ public class HomeActivity extends AppCompatActivity {
     private String accessToken;
     private FrameLayout fragmentContainer;
     private TabLayout tabLayout;
+    private Button backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +30,21 @@ public class HomeActivity extends AppCompatActivity {
         accessToken = getIntent().getStringExtra("ACCESS_TOKEN");
         fragmentContainer = (FrameLayout) findViewById(R.id.fragmentContainer);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        backBtn = (Button) findViewById(R.id.back_to_welcome_btn);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, ArtistsFragment.newInstance(accessToken))
                 .addToBackStack(null)
                 .commit();
+
+
+        backBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
+
+
+
+
+
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
