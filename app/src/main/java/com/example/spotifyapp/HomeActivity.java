@@ -39,6 +39,11 @@ public class HomeActivity extends AppCompatActivity {
 
 
         backBtn.setOnClickListener(v -> {
+            if (TracksFragment.mediaPlayer != null) {
+                TracksFragment.mediaPlayer.stop();
+                TracksFragment.mediaPlayer.release();
+                TracksFragment.mediaPlayer = null;
+            }
             Intent intent = new Intent(HomeActivity.this, MainActivity.class);
             startActivity(intent);
         });
