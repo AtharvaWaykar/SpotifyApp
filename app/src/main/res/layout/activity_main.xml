@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Request Token (no need to click)" />
+            android:text="Request Code to save to firebase (no need to click)" />
 
         <TextView
             android:id="@+id/code_text_view"
