@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private Call mCall;
     private int deleteCounter = 0;
 
-    private TextView tokenTextView, codeTextView;
     private RadioButton oneMonth, sixMonths, year;
 
     @Override
@@ -53,37 +52,36 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Initialize the views
-        tokenTextView = (TextView) findViewById(R.id.token_text_view);
-        codeTextView = (TextView) findViewById(R.id.code_text_view);
         oneMonth = (RadioButton) findViewById(R.id.oneMonth_radio);
         sixMonths = (RadioButton) findViewById(R.id.sixMonths_radio);
         year = (RadioButton) findViewById(R.id.year_radio);
         // Initialize the buttons
-        Button tokenBtn = (Button) findViewById(R.id.token_btn);
-        Button codeBtn = (Button) findViewById(R.id.code_btn);
-        Button profileBtn = (Button) findViewById(R.id.profile_btn);
-        Button nextBtn = (Button) findViewById(R.id.next_btn);
+        Button codeBtn = (Button) findViewById(R.id.token_btn);
+        Button deleteBtn = (Button) findViewById(R.id.code_btn);
+        Button logoutBtn = (Button) findViewById(R.id.profile_btn);
+        Button myWrappedBtn = (Button) findViewById(R.id.next_btn);
 
         auth = FirebaseAuth.getInstance();
         getToken();
+        codeBtn.setOnClickListener((v) -> {
+            getCode();
+        });
 
+        myWrappedBtn.setOnClickListener((v) -> {
+            goHomeActivity();
+        });
         timeRange = "short_term";
         oneMonth.setOnClickListener((v) -> {
             timeRange = "short_term";
         });
-
         sixMonths.setOnClickListener((v) -> {
             timeRange = "medium_term";
         });
-
         year.setOnClickListener((v) -> {
             timeRange = "long_term";
         });
-        tokenBtn.setOnClickListener((v) -> {
-            getCode();
-        });
 
-        codeBtn.setOnClickListener((v) -> {
+        deleteBtn.setOnClickListener((v) -> {
             deleteCounter++;
             if (deleteCounter % 2 != 0) {
                 Toast.makeText(MainActivity.this, "Are you sure?", Toast.LENGTH_LONG).show();
@@ -114,8 +112,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-
-        profileBtn.setOnClickListener((v) -> {
+        logoutBtn.setOnClickListener((v) -> {
             FirebaseUser currentUser = auth.getCurrentUser();
             currentUser = null;
             auth.signOut();
@@ -124,10 +121,6 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("ACCESS_TOKEN", mAccessToken);
             startActivity(intent);
 
-        });
-
-        nextBtn.setOnClickListener((v) -> {
-            goHomeActivity();
         });
 
     }
@@ -154,6 +147,19 @@ public class MainActivity extends AppCompatActivity {
         AuthorizationClient.openLoginActivity(MainActivity.this, AUTH_CODE_REQUEST_CODE, request);
     }
 
+    /**
+     * Get authentication request
+     *
+     * @param type the type of the request
+     * @return the authentication request
+     */
+    private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
+        return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
+                .setShowDialog(true)
+                .setScopes(new String[] { "user-read-email", "user-top-read" }) // <--- Change the scope of your requested token here
+                .setCampaign("your-campaign-token")
+                .build();
+    }
 
     /**
      * When the app leaves this activity to momentarily get a token/code, this function
@@ -204,7 +210,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void saveAccessCodeToFirebase(String accessCode) {
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
@@ -245,21 +250,6 @@ public class MainActivity extends AppCompatActivity {
     private void setTextAsync(final String text, TextView textView) {
         runOnUiThread(() -> textView.setText(text));
     }
-
-    /**
-     * Get authentication request
-     *
-     * @param type the type of the request
-     * @return the authentication request
-     */
-    private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
-        return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
-                .setShowDialog(true)
-                .setScopes(new String[] { "user-read-email", "user-top-read" }) // <--- Change the scope of your requested token here
-                .setCampaign("your-campaign-token")
-                .build();
-    }
-
 
     /**
      * Gets the redirect Uri for Spotify
