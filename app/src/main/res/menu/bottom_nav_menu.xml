@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@color/design_default_color_background"
+        android:id="@+id/todo"
+        android:title="Home" />
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@color/design_default_color_background"
+        android:id="@+id/assignment"
+        android:title="Wrapped" />
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@color/design_default_color_background"
+        android:id="@+id/exam"
+        android:title="AI" />
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@color/design_default_color_background"
+        android:id="@+id/course"
+        android:title="Settings" />
+</menu>

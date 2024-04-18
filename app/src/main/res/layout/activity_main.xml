@@ -106,6 +106,8 @@
                 android:layout_margin="8dp"
                 android:text="Delete my account" />
         </LinearLayout>
+
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

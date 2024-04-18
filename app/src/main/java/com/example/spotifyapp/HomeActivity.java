@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 
 import com.example.spotifyapp.artists.ArtistsFragment;
 import com.example.spotifyapp.tracks.TracksFragment;
+import com.example.spotifyapp.ai.AiFragment;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
@@ -59,6 +60,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 Fragment artistsFragment = ArtistsFragment.newInstance(accessToken, timeRange);
                 Fragment tracksFragment = TracksFragment.newInstance(accessToken, timeRange);
+                Fragment aiFragment = AiFragment.newInstance(accessToken, timeRange);
 
                 Fragment selectedFragment = artistsFragment;
 
@@ -88,6 +90,10 @@ public class HomeActivity extends AppCompatActivity {
                         selectedFragment = tracksFragment;
 
                         break;
+                    case 2:
+                        selectedFragment = aiFragment;
+
+
                 }
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, selectedFragment)

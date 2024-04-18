@@ -37,11 +37,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tracks" />
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/aiTab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AI" />
     </com.google.android.material.tabs.TabLayout>
+
 
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="700dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout">
+
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragmentContainer"
+        app:menu="@menu/bottom_nav_menu"
+
+        />
+
 
 </LinearLayout>
+
