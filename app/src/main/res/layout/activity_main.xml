@@ -17,32 +17,48 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Welcome!"
+            android:text="Welcome"
             android:textColor="@color/white"
             android:textStyle="bold"
+            android:shadowColor="@color/black"
+            android:shadowRadius="25"
+            android:shadowDy="20"
             android:textSize="80dp"/>
 
+<!--        <TextView-->
+<!--            android:id="@+id/token_text_view"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="8dp"-->
+<!--            tools:text="Token:" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/token_btn"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="8dp"-->
+<!--            android:text="Request Code to save to firebase (no need to click)" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/code_text_view"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="8dp"-->
+<!--            tools:text="Code:" />-->
+
+
         <TextView
-            android:id="@+id/token_text_view"
+            android:id="@+id/user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            tools:text="Token:" />
-
-        <Button
-            android:id="@+id/token_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="Request Code to save to firebase (no need to click)" />
-
-        <TextView
-            android:id="@+id/code_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            tools:text="Code:" />
-
+            android:text="User!"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="80dp"
+            android:shadowColor="@color/black"
+            android:shadowRadius="25"
+            android:shadowDy="20"
+            android:layout_marginBottom="150dp"/>
 
         <RadioGroup
             android:layout_width="match_parent"

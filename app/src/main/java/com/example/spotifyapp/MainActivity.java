@@ -10,6 +10,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.spotifyapp.tracks.Track;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,7 +22,10 @@ import com.spotify.sdk.android.auth.AuthorizationResponse;
 import com.google.firebase.auth.FirebaseAuth;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,6 +33,12 @@ import com.google.firebase.database.ValueEventListener;
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private String mAccessToken, mAccessCode, timeRange;
     private Call mCall;
     private int deleteCounter = 0;
+    private TextView userTextView;
 
     private RadioButton oneMonth, sixMonths, year;
 
@@ -51,21 +62,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize the views
+        // Initialize Views
+        userTextView = (TextView) findViewById(R.id.user);
+
+        // Initialize the Radio buttons
         oneMonth = (RadioButton) findViewById(R.id.oneMonth_radio);
         sixMonths = (RadioButton) findViewById(R.id.sixMonths_radio);
         year = (RadioButton) findViewById(R.id.year_radio);
         // Initialize the buttons
-        Button codeBtn = (Button) findViewById(R.id.token_btn);
+        //Button codeBtn = (Button) findViewById(R.id.token_btn);
         Button deleteBtn = (Button) findViewById(R.id.code_btn);
         Button logoutBtn = (Button) findViewById(R.id.profile_btn);
         Button myWrappedBtn = (Button) findViewById(R.id.next_btn);
 
         auth = FirebaseAuth.getInstance();
         getToken();
-        codeBtn.setOnClickListener((v) -> {
-            getCode();
-        });
+//        codeBtn.setOnClickListener((v) -> {
+//            getCode();
+//        });
 
         myWrappedBtn.setOnClickListener((v) -> {
             goHomeActivity();
@@ -173,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         // Check which request code is present (if any)
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
             mAccessToken = response.getAccessToken();
+            fetchUserData(mAccessToken);
             //setTextAsync(mAccessToken, tokenTextView);
 
         } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
@@ -238,6 +253,48 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("ACCESS_TOKEN", mAccessToken);
         intent.putExtra("TIME_RANGE", timeRange);
         startActivity(intent);
+    }
+
+
+    // Fetching user data for welcome screen
+    private void fetchUserData(String accessToken) {
+        if (mAccessToken == null) {
+            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Create a request to get the user profile
+        final Request request = new Request.Builder()
+                .url("https://api.spotify.com/v1/me")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(MainActivity.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    final JSONObject jsonObject = new JSONObject(response.body().string());
+                    setTextAsync(jsonObject.get("display_name").toString() + "!", userTextView);
+
+
+
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     /**

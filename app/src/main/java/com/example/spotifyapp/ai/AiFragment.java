@@ -1,20 +1,16 @@
 package com.example.spotifyapp.ai;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.spotifyapp.MainActivity;
 import com.example.spotifyapp.R;
-import com.example.spotifyapp.artists.Artist;
-import com.example.spotifyapp.tracks.Track;
 import com.example.spotifyapp.tracks.TracksFragment;
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
@@ -28,16 +24,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -53,7 +42,7 @@ import okhttp3.Response;
 public class AiFragment extends Fragment {
 
     private String accessToken, timeRange;
-    TextView textView;
+    TextView AiResponseTextView;
     public  static List<String> tracksList;
     private List<String> artistsList;
 
@@ -94,7 +83,7 @@ public class AiFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ai, container, false);
-        textView = view.findViewById(R.id.results);
+        AiResponseTextView = view.findViewById(R.id.results);
         tracksList = new ArrayList<>();
         artistsList = new ArrayList<>();
         return view;
@@ -118,7 +107,7 @@ public class AiFragment extends Fragment {
                 /* apiKey */ "AIzaSyAY2TwmK1_eQHMztKHxtoyLpvAdMoG30yg");
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
         String question = "Dynamically describe how someone who listens to "+ tracksList.toString()
-                + "tends to act/think/dress";
+                + "tends to act/think/dress and format the text simply and elegantly";
         Content content = new Content.Builder()
                 .addText(question)
                 .build();
@@ -128,7 +117,7 @@ public class AiFragment extends Fragment {
             @Override
             public void onSuccess(GenerateContentResponse result) {
                 String resultText = result.getText();
-                textView.setText(resultText);
+                AiResponseTextView.setText(resultText);
                 System.out.println(resultText);
             }
 
