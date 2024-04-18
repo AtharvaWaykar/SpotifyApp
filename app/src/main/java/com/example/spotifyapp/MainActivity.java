@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private Call mCall;
     private int deleteCounter = 0;
     private TextView userTextView;
+    private Button myWrappedBtn;
 
     private RadioButton oneMonth, sixMonths, year;
 
@@ -73,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
         //Button codeBtn = (Button) findViewById(R.id.token_btn);
         Button deleteBtn = (Button) findViewById(R.id.code_btn);
         Button logoutBtn = (Button) findViewById(R.id.profile_btn);
-        Button myWrappedBtn = (Button) findViewById(R.id.next_btn);
+        myWrappedBtn = (Button) findViewById(R.id.next_btn);
+
+        myWrappedBtn.setEnabled(false);
 
         auth = FirebaseAuth.getInstance();
         getToken();
@@ -188,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
             mAccessToken = response.getAccessToken();
             fetchUserData(mAccessToken);
+            myWrappedBtn.setEnabled(true);
+
             //setTextAsync(mAccessToken, tokenTextView);
 
         } else if (AUTH_CODE_REQUEST_CODE == requestCode) {

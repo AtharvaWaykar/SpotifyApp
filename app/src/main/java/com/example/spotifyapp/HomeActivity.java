@@ -93,6 +93,21 @@ public class HomeActivity extends AppCompatActivity {
                     case 2:
                         selectedFragment = aiFragment;
 
+                        if (TracksFragment.mediaPlayer != null) {
+                            TracksFragment.mediaPlayer.stop();
+                            TracksFragment.mediaPlayer.release();
+                            TracksFragment.mediaPlayer = null;
+                        }
+
+                        // Initialize media player
+                        TracksFragment.mediaPlayer = new MediaPlayer();
+                        TracksFragment.mediaPlayer.setAudioAttributes(
+                                new AudioAttributes.Builder()
+                                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                                        .build()
+                        );
+
 
                 }
 
