@@ -104,9 +104,9 @@ public class AiFragment extends Fragment {
     private void request() throws Exception {
         GenerativeModel gm = new GenerativeModel(/* modelName */ "gemini-pro",
 // Access your API key as a Build Configuration variable (see "Set up your API key" above)
-                /* apiKey */ "AIzaSyAY2TwmK1_eQHMztKHxtoyLpvAdMoG30yg");
+                /* apiKey */ "AIzaSyDUs7iaYAVe2T3lpC2TJ5M3X5u3dI7Rg70");
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
-        String question = "Dynamically describe how someone who listens to "+ tracksList.toString()
+        String question = "Dynamically describe how someone who listens to "+ artistsList.toString()
                 + "tends to act/think/dress and format the text simply and elegantly";
         Content content = new Content.Builder()
                 .addText(question)
